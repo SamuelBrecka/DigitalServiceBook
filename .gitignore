@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Backend (Spring Boot)
+data.db
+*.db
+/data.db
+*.log
