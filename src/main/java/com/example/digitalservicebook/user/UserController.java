@@ -1,18 +1,16 @@
-package com.example.digitalservicebook;
+package com.example.digitalservicebook.user;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
-public class HelloController {
+@RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
+public class UserController {
 
     private final UserService userService;
-
-    public HelloController(UserService userService) {
-        this.userService = userService;
-    }
 
     @GetMapping("/")
     public String index() {
@@ -25,7 +23,7 @@ public class HelloController {
     }
 
     @PostMapping("/users")
-    public String createUser(@RequestBody User user) {
+    public String createUser(@RequestBody CreateUserRequest user) {
         userService.addUser(user);
         return "Používateľ " + user.getFirstName() + " bol úspešne pridaný!";
     }
@@ -33,5 +31,10 @@ public class HelloController {
     @GetMapping("/test")
     public String test() {
         return "Backend bezi!";
+    }
+
+    @DeleteMapping("/users/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
     }
 }

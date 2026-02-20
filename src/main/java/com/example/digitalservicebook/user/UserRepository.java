@@ -1,4 +1,4 @@
-package com.example.digitalservicebook;
+package com.example.digitalservicebook.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
