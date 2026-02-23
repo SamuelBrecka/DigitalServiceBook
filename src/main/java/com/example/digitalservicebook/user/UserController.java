@@ -23,9 +23,8 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public String createUser(@RequestBody CreateUserRequest user) {
+    public void createUser(@RequestBody CreateUserRequest user) {
         userService.addUser(user);
-        return "Používateľ " + user.getFirstName() + " bol úspešne pridaný!";
     }
 
     @GetMapping("/test")

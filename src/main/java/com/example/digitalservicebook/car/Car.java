@@ -28,6 +28,8 @@ public class Car {
 
     private int manufactureYear;
     private double engineCapacity;
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "TEXT")
     private FuelType fuelType;
     private String color;
     private int mileage;
@@ -38,12 +40,4 @@ public class Car {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User owner;
-
-}
-
-enum FuelType {
-    Diesel,
-    Gasoline,
-    LPG,
-    Electro
 }

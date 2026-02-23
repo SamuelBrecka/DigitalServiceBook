@@ -1,38 +1,40 @@
-import { useEffect, useState } from 'react'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Users from './Users'; // Tvoj pôvodný kód pre userov
+import Cars from './Cars';   // Tvoj nový kód pre autá
 
 function App() {
-  const [users, setUsers] = useState([])
-
-  useEffect(() => {
-    // Fetch volá tvoj bežiaci Spring Boot
-    fetch('http://localhost:8080/users')
-      .then(res => res.json())
-      .then(data => setUsers(data))
-      .catch(err => console.error("Backend asi spinká:", err))
-  }, [])
-
   return (
-    <div style={{ padding: '40px', fontFamily: 'sans-serif' }}>
-      <h1>Môj Fullstack Projekt 🚀</h1>
-      <h3>Používatelia vytiahnutí zo SQLite cez Spring Boot:</h3>
+    <Router>
+      <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
 
-      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-        {users.map(user => (
-          <div key={user.id} style={{
-            border: '1px solid #ccc',
-            padding: '10px',
-            borderRadius: '8px',
-            background: '#f9f9f9',
-            color: 'black'
-          }}>
-            <strong>{user.firstName} {user.lastName}</strong>
-            <p>Vek: {user.age}</p>
-          </div>
-        ))}
+        {/* NAVIGÁCIA (MENU) */}
+        <nav style={{
+          marginBottom: '30px',
+          padding: '15px',
+          backgroundColor: '#282c34',
+          borderRadius: '8px'
+        }}>
+          <Link to="/users" style={{ color: 'white', marginRight: '20px', textDecoration: 'none', fontWeight: 'bold' }}>
+            👥 Používatelia
+          </Link>
+          <Link to="/cars" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
+            🚗 Autá
+          </Link>
+        </nav>
+
+        {/* OBSAH STRÁNKY */}
+        <div style={{ background: 'black', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
+          <Routes>
+            <Route path="/users" element={<Users />} />
+            <Route path="/cars" element={<Cars />} />
+            {/* Úvodná stránka */}
+            <Route path="/" element={<h2>Vitaj v Digitálnej servisnej knižke! Vyber si sekciu v menu hore.</h2>} />
+          </Routes>
+        </div>
+
       </div>
-      {users.length === 0 && <p>Žiadni používatelia v DB. Skús pridať cez Postman!</p>}
-    </div>
-  )
+    </Router>
+  );
 }
 
-export default App
+export default App;

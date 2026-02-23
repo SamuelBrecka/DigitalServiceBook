@@ -19,5 +19,5 @@ public class CreateCarRequest {
 
     LocalDate lastServiceDate;
     LocalDate nextStkDate;
-    long ownerId;
+    Long ownerId;
 }

@@ -19,7 +19,14 @@ public class UserService {
     }
 
     public void addUser(CreateUserRequest userRequest) {
-        this.userRepository.save(this.userMapper.toEntity(userRequest));
+        User user = userMapper.toEntity(userRequest);
+        userRepository.save(user);
+
+        // TEST: Skúsime ho hneď vytiahnuť z DB podľa zoznamu
+        List<User> allUsers = userRepository.findAll();
+        for (User u : allUsers) {
+            System.out.println("Užívateľ v DB má ID: " + u.getId());
+        }
     }
 
     public void deleteUser(Long id) {
