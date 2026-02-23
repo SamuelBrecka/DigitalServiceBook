@@ -1,10 +1,13 @@
 package com.example.digitalservicebook.user;
 
+import com.example.digitalservicebook.car.Car;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,4 +23,7 @@ public class User {
     private String firstName;
     private String lastName;
     private int age;
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private List<Car> cars;
 }
