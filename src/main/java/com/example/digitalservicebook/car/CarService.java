@@ -19,12 +19,17 @@ public class CarService {
     }
 
     public void addCar(CreateCarRequest request) {
-        User owner = userRepository.findById(request.getOwnerId())
-                .orElseThrow(() -> new RuntimeException("Majiteľ neexistuje"));
-
         Car car = carMapper.toCar(request);
-        car.setOwner(owner);
 
+        if (request.getOwnerId() != null) {
+            User owner = userRepository.findById(request.getOwnerId())
+                    .orElseThrow(() -> new RuntimeException("Majiteľ s ID " + request.getOwnerId() + " neexistuje"));
+            car.setOwner(owner);
+        } else {
+            car.setOwner(null);
+        }
+
+        // 3. Ulož auto
         carRepository.save(car);
     }
 
