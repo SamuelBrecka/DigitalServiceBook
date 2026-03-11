@@ -1,40 +1,62 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Users from './Users'; // Tvoj pôvodný kód pre userov
-import Cars from './Cars';   // Tvoj nový kód pre autá
+import Users from './Users';
+import Cars from './Cars';
+import Login from './Login';
 
 function App() {
-  return (
-    <Router>
-      <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
+    return (
+        <Router>
+            <div style={{ fontFamily: 'Arial, sans-serif', minHeight: '100vh', backgroundColor: '#f0f2f5' }}>
 
-        {/* NAVIGÁCIA (MENU) */}
-        <nav style={{
-          marginBottom: '30px',
-          padding: '15px',
-          backgroundColor: '#282c34',
-          borderRadius: '8px'
-        }}>
-          <Link to="/users" style={{ color: 'white', marginRight: '20px', textDecoration: 'none', fontWeight: 'bold' }}>
-            👥 Používatelia
-          </Link>
-          <Link to="/cars" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
-            🚗 Autá
-          </Link>
-        </nav>
+                {/* HEADER SEKCOA */}
+                <header style={{
+                    backgroundColor: '#282c34',
+                    padding: '40px 20px',
+                    color: 'white',
+                    textAlign: 'center',
+                    boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
+                }}>
+                    <h1 style={{ margin: 0, fontSize: '2.5rem' }}>Digital Service Book</h1>
+                    <p style={{ opacity: 0.8 }}>Správa tvojho vozového parku jednoducho a rýchlo</p>
 
-        {/* OBSAH STRÁNKY */}
-        <div style={{ background: 'black', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
-          <Routes>
-            <Route path="/users" element={<Users />} />
-            <Route path="/cars" element={<Cars />} />
-            {/* Úvodná stránka */}
-            <Route path="/" element={<h2>Vitaj v Digitálnej servisnej knižke! Vyber si sekciu v menu hore.</h2>} />
-          </Routes>
-        </div>
+                    {/* TLAČIDLÁ POD NÁPISOM */}
+                    <div style={{ marginTop: '20px' }}>
+                        <Link to="/cars" style={buttonStyle}>🚗 Autá</Link>
+                        <Link to="/users" style={buttonStyle}>👥 Používatelia</Link>
+                        <Link to="/login" style={{ ...buttonStyle, backgroundColor: '#61dafb', color: '#282c34' }}>🔑 Login</Link>
+                    </div>
+                </header>
 
-      </div>
-    </Router>
-  );
+                {/* OBSAH STRÁNKY */}
+                <main style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto' }}>
+                    <Routes>
+                        <Route path="/cars" element={<Cars />} />
+                        <Route path="/users" element={<Users />} />
+                        <Route path="/login" element={<Login onLogin={() => console.log('Prihlásený!')} />} />
+                        <Route path="/" element={
+                            <div style={{ textAlign: 'center', marginTop: '50px' }}>
+                                <h2>Vitaj! Vyber si sekciu v menu hore.</h2>
+                            </div>
+                        } />
+                    </Routes>
+                </main>
+
+            </div>
+        </Router>
+    );
 }
+
+// Pomocný štýl pre tlačidlá (aby sme ho nemuseli furt vypisovať)
+const buttonStyle = {
+    textDecoration: 'none',
+    padding: '12px 25px',
+    margin: '0 10px',
+    borderRadius: '5px',
+    backgroundColor: '#4a90e2',
+    color: 'white',
+    fontWeight: 'bold',
+    display: 'inline-block',
+    transition: 'transform 0.2s'
+};
 
 export default App;

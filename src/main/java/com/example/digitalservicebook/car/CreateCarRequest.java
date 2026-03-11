@@ -11,11 +11,11 @@ public class CreateCarRequest {
     String brand;
     String model;
 
-    int manufactureYear;
-    double engineCapacity;
+    Integer manufactureYear;
+    Double engineCapacity;
     FuelType fuelType;
     String color;
-    int mileage;
+    Integer mileage;
 
     LocalDate lastServiceDate;
     LocalDate nextStkDate;

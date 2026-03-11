@@ -1,6 +1,7 @@
 package com.example.digitalservicebook.car;
 
 import com.example.digitalservicebook.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,18 +27,19 @@ public class Car {
     private String brand;
     private String model;
 
-    private int manufactureYear;
-    private double engineCapacity;
+    private Integer manufactureYear;
+    private Double engineCapacity;
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "TEXT")
     private FuelType fuelType;
     private String color;
-    private int mileage;
+    private Integer mileage;
 
     private LocalDate lastServiceDate;
     private LocalDate nextStkDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User owner;
 }

@@ -1,6 +1,7 @@
 package com.example.digitalservicebook.user;
 
 import com.example.digitalservicebook.car.Car;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,5 +27,6 @@ public class User {
     private int age;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Car> cars;
 }

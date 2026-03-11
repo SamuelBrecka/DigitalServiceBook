@@ -4,7 +4,7 @@ function Cars() {
   const [cars, setCars] = useState([]);
   const [users, setUsers] = useState([]); // Potrebujeme zoznam majiteľov
   const [formData, setFormData] = useState({
-    brand: '', model: '', vin: '', licensePlate: '', ownerId: ''
+    brand: '', model: '', vin: '', licensePlate: '', manufactureYear: '', ownerId: ''
   });
 
   useEffect(() => {
@@ -45,7 +45,13 @@ function Cars() {
 
       <hr />
       <h2>Zoznam áut</h2>
-      {/* Tu ostáva tabuľka, ktorú sme robili minule */}
+      <ul>
+        {cars.map(car => (
+            <li key={car.id}>
+              {car.brand} {car.model}
+            </li>
+        ))}
+      </ul>
     </div>
   );
 }
