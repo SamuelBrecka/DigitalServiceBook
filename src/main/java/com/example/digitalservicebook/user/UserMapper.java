@@ -1,14 +1,18 @@
 package com.example.digitalservicebook.user;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
-    public User toEntity(CreateUserRequest request) {
+    public User toEntity(CreateUserRequest request, PasswordEncoder passwordEncoder) {
         var userModel = new User();
         userModel.setFirstName(request.getFirstName());
         userModel.setLastName(request.getLastName());
-        userModel.setAge(request.getAge());
+        userModel.setUserName(request.getUserName());
+
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        userModel.setPassword(encodedPassword);
         return userModel;
     }
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 function Users() {
   const [users, setUsers] = useState([])
-  const [formData, setFormData] = useState({ firstName: '', lastName: '', age: '' })
+  const [formData, setFormData] = useState({ firstName: '', lastName: '' })
 
   const fetchUsers = () => {
     fetch('http://localhost:8080/users')
@@ -21,7 +21,7 @@ function Users() {
     })
     if (response.ok) {
       fetchUsers()
-      setFormData({ firstName: '', lastName: '', age: '' })
+      setFormData({ firstName: '', lastName: ''})
     }
   }
 
@@ -31,11 +31,10 @@ function Users() {
       <form onSubmit={handleSubmit}>
         <input placeholder="Meno" value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} />
         <input placeholder="Priezvisko" value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} />
-        <input type="number" placeholder="Vek" value={formData.age} onChange={e => setFormData({...formData, age: e.target.value})} />
         <button type="submit">Pridať</button>
       </form>
       <ul>
-        {users.map(u => <li key={u.id}>{u.firstName} {u.lastName} ({u.age}r)</li>)}
+        {users.map(u => <li key={u.id}>{u.firstName} {u.lastName} </li>)}
       </ul>
     </div>
   )

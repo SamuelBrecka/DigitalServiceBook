@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Users from './Users';
 import Cars from './Cars';
 import Login from './Login';
+import Register from "./Register.jsx";
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                         <Link to="/cars" style={buttonStyle}>🚗 Autá</Link>
                         <Link to="/users" style={buttonStyle}>👥 Používatelia</Link>
                         <Link to="/login" style={{ ...buttonStyle, backgroundColor: '#61dafb', color: '#282c34' }}>🔑 Login</Link>
+                        <Link to="/register" style={{ ...buttonStyle, backgroundColor: '#61dafb', color: '#282c34' }}>🔑 Register</Link>
                     </div>
                 </header>
 
@@ -32,6 +34,7 @@ function App() {
                     <Routes>
                         <Route path="/cars" element={<Cars />} />
                         <Route path="/users" element={<Users />} />
+                        <Route path="/register" element={<Register />} />
                         <Route path="/login" element={<Login onLogin={() => console.log('Prihlásený!')} />} />
                         <Route path="/" element={
                             <div style={{ textAlign: 'center', marginTop: '50px' }}>
