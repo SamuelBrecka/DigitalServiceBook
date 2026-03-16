@@ -1,4 +1,5 @@
 package com.example.digitalservicebook.user;
+import com.example.digitalservicebook.user.dto.CreateUserRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.digitalservicebook.car.Car;
 import com.example.digitalservicebook.car.CarRepository;
@@ -6,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

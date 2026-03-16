@@ -1,7 +1,6 @@
 package com.example.digitalservicebook.user;
 
 import com.example.digitalservicebook.car.Car;
-import com.example.digitalservicebook.roles.UserRole;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

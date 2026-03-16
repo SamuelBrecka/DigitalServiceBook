@@ -1,4 +1,4 @@
-package com.example.digitalservicebook.config;
+package com.example.digitalservicebook.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

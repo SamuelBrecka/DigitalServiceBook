@@ -1,5 +1,6 @@
 package com.example.digitalservicebook.car;
 
+import com.example.digitalservicebook.car.dto.CreateCarRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

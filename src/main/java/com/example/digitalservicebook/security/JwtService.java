@@ -1,4 +1,4 @@
-package com.example.digitalservicebook.config;
+package com.example.digitalservicebook.security;
 
 import com.example.digitalservicebook.user.User;
 import io.jsonwebtoken.Jwts;

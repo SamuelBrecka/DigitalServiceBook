@@ -1,4 +1,4 @@
-package com.example.digitalservicebook.config;
+package com.example.digitalservicebook.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

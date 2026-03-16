@@ -1,8 +1,9 @@
 package com.example.digitalservicebook.user;
 
-import com.example.digitalservicebook.config.JwtService;
-import com.example.digitalservicebook.roles.LoginRequest;
-import com.example.digitalservicebook.roles.LoginResponse;
+import com.example.digitalservicebook.security.JwtService;
+import com.example.digitalservicebook.user.dto.CreateUserRequest;
+import com.example.digitalservicebook.user.dto.LoginRequest;
+import com.example.digitalservicebook.user.dto.LoginResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

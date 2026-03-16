@@ -1,5 +1,6 @@
 package com.example.digitalservicebook.user;
 
+import com.example.digitalservicebook.user.dto.CreateUserRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 

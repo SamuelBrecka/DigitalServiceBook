@@ -1,5 +1,6 @@
-package com.example.digitalservicebook.car;
+package com.example.digitalservicebook.car.dto;
 
+import com.example.digitalservicebook.car.FuelType;
 import lombok.Value;
 
 import java.time.LocalDate;

@@ -1,5 +1,6 @@
 package com.example.digitalservicebook.car;
 
+import com.example.digitalservicebook.car.dto.CreateCarRequest;
 import com.example.digitalservicebook.user.User;
 import com.example.digitalservicebook.user.UserRepository;
 import lombok.RequiredArgsConstructor;

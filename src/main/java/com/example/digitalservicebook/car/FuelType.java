@@ -1,6 +1,6 @@
 package com.example.digitalservicebook.car;
 
-enum FuelType {
+public enum FuelType {
     Diesel,
     Gasoline,
     LPG,
