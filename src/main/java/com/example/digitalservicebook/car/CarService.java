@@ -15,8 +15,8 @@ public class CarService {
     private final UserRepository userRepository;
     private final CarMapper carMapper;
 
-    public List<Car> getAllCars() {
-        return carRepository.findAll();
+    public List<Car> getAllUserCars(Long id) {
+        return carRepository.findByOwnerId(id);
     }
 
     public void addCar(CreateCarRequest request) {

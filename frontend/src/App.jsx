@@ -1,10 +1,11 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Users from './Users';
-import Cars from './Cars';
 import Login from './Login';
 import Register from "./Register.jsx";
 import ProtectedRoute from './ProtectedRoute';
+import MyGarage from "./MyGarage.jsx";
+import EditCar from "./EditCar.jsx";
 
 function App() {
     const [user, setUser] = useState(null);
@@ -66,8 +67,7 @@ function App() {
                             </>
                         ) : (
                             <>
-                            <Link to="/cars" style={buttonStyle}>🚗 Autá</Link>
-                            <Link to="/users" style={buttonStyle}>👥 Používatelia</Link>
+                            <Link to="/garage" style={buttonStyle}>Moje auta</Link>
 
                             <button onClick={handleLogout} style={{ ...buttonStyle, backgroundColor: '#ff4d4f', border: 'none', cursor: 'pointer' }}>
                                 🚪 Odhlásiť
@@ -87,15 +87,19 @@ function App() {
                             </div>
                         } />
 
-                        <Route path="/cars" element={
-                            <ProtectedRoute user={user}>
-                                <Cars />
-                            </ProtectedRoute>
-                        } />
-
                         <Route path="/users" element={
                             <ProtectedRoute user={user}>
                                 <Users />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/garage" element={
+                            <ProtectedRoute user={user}>
+                                <MyGarage />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/edit-car/:id" element={
+                            <ProtectedRoute user={user}>
+                                <EditCar />
                             </ProtectedRoute>
                         } />
                     </Routes>

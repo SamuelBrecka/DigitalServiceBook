@@ -8,21 +8,21 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
+@RequestMapping("/cars")
 public class CarController {
     private final CarService carService;
 
-    @GetMapping("/cars")
-    public List<Car> getCars() {
-        return this.carService.getAllCars();
+    @GetMapping()
+    public List<Car> getCars(@RequestParam Long userId) {
+        return this.carService.getAllUserCars(userId);
     }
 
-    @PostMapping("/cars")
+    @PostMapping()
     public void addCar(@RequestBody CreateCarRequest request) {
         this.carService.addCar(request);
     }
 
-    @DeleteMapping("/cars/{id}")
+    @DeleteMapping("/{id}")
     public void deleteCar(@PathVariable Long id) {
         this.carService.deleteCar(id);
     }
