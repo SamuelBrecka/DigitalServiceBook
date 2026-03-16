@@ -22,7 +22,7 @@ public class User {
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
-    @Enumerated(EnumType.STRING) // Uloží v DB ako text (napr. "ADMIN")
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     private String firstName;

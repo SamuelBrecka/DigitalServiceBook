@@ -7,5 +7,6 @@ public class LoginResponse {
     String token;
     Long id;
     String userName;
-    String role;
+    String firstName;
+    String lastName;
 }

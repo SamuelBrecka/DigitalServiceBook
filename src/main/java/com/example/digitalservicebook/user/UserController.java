@@ -40,7 +40,8 @@ public class UserController {
                     token,
                     user.getId(),
                     user.getUserName(),
-                    user.getRole().toString()
+                    user.getFirstName(),
+                    user.getLastName()
             );
 
             return ResponseEntity.ok(response);
