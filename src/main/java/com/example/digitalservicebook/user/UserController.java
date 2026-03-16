@@ -1,6 +1,8 @@
 package com.example.digitalservicebook.user;
 
-import com.example.digitalservicebook.JwtService;
+import com.example.digitalservicebook.config.JwtService;
+import com.example.digitalservicebook.roles.LoginRequest;
+import com.example.digitalservicebook.roles.LoginResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,12 +33,13 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
             User user = userService.login(request.getUserName(), request.getPassword());
-            String token = jwtService.generateToken(user.getUserName());
+            String token = jwtService.generateToken(user);
 
             LoginResponse response = new LoginResponse(
                     token,
                     user.getId(),
-                    user.getUserName()
+                    user.getUserName(),
+                    user.getRole().toString()
             );
 
             return ResponseEntity.ok(response);

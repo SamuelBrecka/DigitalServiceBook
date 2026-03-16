@@ -1,4 +1,4 @@
-package com.example.digitalservicebook.user;
+package com.example.digitalservicebook.roles;
 
 import lombok.Value;
 

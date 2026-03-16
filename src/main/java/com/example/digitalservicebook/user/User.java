@@ -1,6 +1,7 @@
 package com.example.digitalservicebook.user;
 
 import com.example.digitalservicebook.car.Car;
+import com.example.digitalservicebook.roles.UserRole;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
+
+    @Enumerated(EnumType.STRING) // Uloží v DB ako text (napr. "ADMIN")
+    private UserRole role;
 
     private String firstName;
     private String lastName;
