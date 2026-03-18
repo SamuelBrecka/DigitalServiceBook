@@ -84,6 +84,9 @@ function App() {
                         <Route path="/" element={
                             <div style={{ textAlign: 'center', marginTop: '50px' }}>
                                 <h2>Vitaj! Vyber si sekciu v menu hore.</h2>
+                                <h2 className="text-primary">Vitaj! Vyber si sekciu v menu hore.</h2>
+                                <h2 className="text-secondary">Vitaj! Vyber si sekciu v menu hore.</h2>
+
                             </div>
                         } />
 
@@ -104,7 +107,6 @@ function App() {
                         } />
                     </Routes>
                 </main>
-
             </div>
         </Router>
     );
