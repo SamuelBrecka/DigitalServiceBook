@@ -33,13 +33,13 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
-            User user = userService.login(request.getUserName(), request.getPassword());
+            User user = userService.login(request.getEmail(), request.getPassword());
             String token = jwtService.generateToken(user);
 
             LoginResponse response = new LoginResponse(
                     token,
                     user.getId(),
-                    user.getUserName(),
+                    user.getEmail(),
                     user.getFirstName(),
                     user.getLastName()
             );

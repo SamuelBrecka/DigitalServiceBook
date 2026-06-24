@@ -10,7 +10,7 @@ public class UserMapper {
         var userModel = new User();
         userModel.setFirstName(request.getFirstName());
         userModel.setLastName(request.getLastName());
-        userModel.setUserName(request.getUserName());
+        userModel.setEmail(request.getEmail());
 
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         userModel.setPassword(encodedPassword);

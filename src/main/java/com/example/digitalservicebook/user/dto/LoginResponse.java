@@ -6,7 +6,7 @@ import lombok.Value;
 public class LoginResponse {
     String token;
     Long id;
-    String userName;
+    String email;
     String firstName;
     String lastName;
 }

@@ -25,10 +25,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @Column(unique = true, nullable = false)
+    private String email;
+
     private String firstName;
     private String lastName;
-
-    private String userName;
     private String password;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)

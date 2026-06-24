@@ -33,8 +33,8 @@ public class UserService {
         return carRepository.findByOwnerId(userId);
     }
 
-    public User login(String username, String rawPassword) {
-        User user = userRepository.findByUserName(username)
+    public User login(String email, String rawPassword) {
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Používateľ neexistuje"));
 
         if (passwordEncoder.matches(rawPassword, user.getPassword())) {
