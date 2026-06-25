@@ -1,70 +1,193 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-function Register( {onRegister } ) {
+function Register() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [userName, setUserName] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const navigate = useNavigate();
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [termsAccepted, setTermsAccepted] = useState(false);
 
-
-    const handleRegister = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        setError('');
 
-        const res = await fetch('http://localhost:8080/users/addUser', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(
-                { firstName, lastName, userName, password })
-        });
-
-        if (res.ok) {
-            navigate('/login');
-        } else {
-            setError('Použivatel už existuje');
+        if (password !== confirmPassword) {
+            alert("Heslá sa nezhodujú!");
+            return;
         }
-    }
+
+        // Sem príde tvoje API volanie na Spring Boot
+        console.log("Odosielam registráciu:", {
+            firstName,
+            lastName,
+            email,
+            password,
+            termsAccepted
+        });
+    };
 
     return (
-        <div style={{ maxWidth: '300px', margin: '100px auto', textAlign: 'center' }}>
-            <h2>Prihlásenie</h2>
-            <form onSubmit={handleRegister} style={{ display: 'grid', gap: '10px' }}>
-                <input
-                    type="text"
-                    placeholder="Zadaj krstné meno"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    style={{ padding: '10px' }}
-                />
-                <input
-                    type="text"
-                    placeholder="Zadaj priezvisko"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    style={{ padding: '10px' }}
-                />
-                <input
-                    type="text"
-                    placeholder="Zadaj používateľské meno"
-                    value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
-                    style={{ padding: '10px' }}
-                />
-                <input
-                    type="text"
-                    placeholder="Zadaj heslo"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    style={{ padding: '10px' }}
-                />
-                <button type="submit" style={{ padding: '10px', backgroundColor: 'blue', color: 'white' }}>
-                    Vstúpiť
-                </button>
-            </form>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+        <div className="flex flex-col min-h-screen bg-background font-body-md antialiased text-on-surface">
+
+            {/* TopAppBar */}
+            <header className="fixed top-0 w-full z-50 bg-surface dark:bg-surface-dim border-b border-base-300 dark:border-outline-variant shadow-sm dark:shadow-none">
+                <div className="flex justify-between items-center px-margin-md md:px-margin-lg h-16 max-w-[1280px] mx-auto">
+                    <div className="flex items-center gap-stack-md">
+                        <span className="material-symbols-outlined text-primary text-3xl" style={{ fontVariationSettings: '"FILL" 1' }}>directions_car</span>
+                        <Link className="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed" to="/">AutoLog</Link>
+                    </div>
+                    <nav className="hidden md:flex items-center gap-gutter"></nav>
+                    <div className="flex items-center gap-stack-md">
+                        <Link className="font-label-md text-label-md text-primary hover:text-secondary transition-colors duration-200 px-4 py-2" to="/login">Sign In</Link>
+                        <Link className="font-label-md text-label-md bg-primary text-on-primary hover:opacity-90 transition-opacity px-6 py-2 rounded-lg" to="/register">Register</Link>
+                    </div>
+                </div>
+            </header>
+
+            {/* Main Content: Registration Section */}
+            <main className="flex-grow flex items-center justify-center pt-24 pb-12 px-margin-sm relative">
+
+                {/* Abstract Background element */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+                    <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-primary-fixed blur-3xl"></div>
+                    <div className="absolute top-[60%] -right-[5%] w-[30%] h-[30%] rounded-full bg-secondary-fixed blur-3xl"></div>
+                </div>
+
+                <div className="relative w-full max-w-md bg-surface-container-lowest border border-base-300 rounded-xl shadow-md p-margin-md md:p-margin-md z-10 transition-all hover:shadow-lg">
+
+                    {/* Brand Identity Header */}
+                    <div className="text-center mb-stack-lg">
+                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary-container text-white mb-stack-sm">
+                            <span className="material-symbols-outlined text-2xl" style={{ fontVariationSettings: '"FILL" 1' }}>how_to_reg</span>
+                        </div>
+                        <h1 className="font-headline-md text-headline-md text-on-surface mb-stack-xs">Vytvoriť účet</h1>
+                        <p className="font-body-sm text-body-sm text-on-surface-variant">Vaša digitálna servisná knižka vždy po ruke.</p>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-stack-md">
+
+                        {/* Full Name Field */}
+                        <div className="grid grid-cols-2 gap-stack-md">
+                            <div className="flex flex-col gap-stack-xs">
+                                <label className="font-label-md text-label-md text-on-surface" htmlFor="first-name">Meno</label>
+                                <div className="relative">
+                                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-xl">person</span>
+                                    <input
+                                        className="w-full pl-10 pr-4 py-3 bg-white border border-base-300 rounded-lg font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all"
+                                        id="first-name"
+                                        type="text"
+                                        placeholder="Janko"
+                                        required
+                                        value={firstName}
+                                        onChange={(e) => setFirstName(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex flex-col gap-stack-xs">
+                                <label className="font-label-md text-label-md text-on-surface" htmlFor="last-name">Priezvisko</label>
+                                <div className="relative">
+                                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-xl">person</span>
+                                    <input
+                                        className="w-full pl-10 pr-4 py-3 bg-white border border-base-300 rounded-lg font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all"
+                                        id="last-name"
+                                        type="text"
+                                        placeholder="Hraško"
+                                        required
+                                        value={lastName}
+                                        onChange={(e) => setLastName(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Email Field */}
+                        <div className="flex flex-col gap-stack-xs">
+                            <label className="font-label-md text-label-md text-on-surface" htmlFor="email">Email</label>
+                            <div className="relative">
+                                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-xl">mail</span>
+                                <input
+                                    className="w-full pl-10 pr-4 py-3 bg-white border border-base-300 rounded-lg font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all"
+                                    id="email"
+                                    type="email"
+                                    placeholder="vas@email.com"
+                                    required
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Password Field */}
+                        <div className="flex flex-col gap-stack-xs">
+                            <label className="font-label-md text-label-md text-on-surface" htmlFor="password">Heslo</label>
+                            <div className="relative">
+                                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-xl">lock</span>
+                                <input
+                                    className="w-full pl-10 pr-4 py-3 bg-white border border-base-300 rounded-lg font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all"
+                                    id="password"
+                                    type="password"
+                                    placeholder="••••••••"
+                                    required
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Confirm Password Field */}
+                        <div className="flex flex-col gap-stack-xs">
+                            <label className="font-label-md text-label-md text-on-surface" htmlFor="confirm-password">Potvrdenie hesla</label>
+                            <div className="relative">
+                                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-xl">lock_reset</span>
+                                <input
+                                    className="w-full pl-10 pr-4 py-3 bg-white border border-base-300 rounded-lg font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all"
+                                    id="confirm-password"
+                                    type="password"
+                                    placeholder="••••••••"
+                                    required
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Terms Checkbox */}
+                        <div className="flex items-start gap-stack-sm mt-stack-xs">
+                            <input
+                                className="custom-checkbox mt-1 h-4 w-4 rounded border-base-300 text-primary-container focus:ring-secondary"
+                                id="terms"
+                                type="checkbox"
+                                required
+                                checked={termsAccepted}
+                                onChange={(e) => setTermsAccepted(e.target.checked)}
+                            />
+                            <label className="font-body-sm text-body-sm text-on-surface-variant" htmlFor="terms">
+                                Súhlasím s <a className="text-primary font-bold hover:underline" href="#">obchodnými podmienkami</a> a spracovaním osobných údajov.
+                            </label>
+                        </div>
+
+                        {/* Submit Button */}
+                        <button className="mt-stack-sm w-full bg-primary-container text-white py-3 px-6 rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity flex items-center justify-center gap-stack-sm" type="submit">
+                            Zaregistrovať sa
+                            <span className="material-symbols-outlined text-lg">arrow_forward</span>
+                        </button>
+                    </form>
+
+                    {/* Login Link */}
+                    <div className="text-center mt-stack-lg border-t border-base-300 pt-stack-md">
+                        <p className="font-body-sm text-body-sm text-on-surface-variant">
+                            Už máte účet?
+                            <Link className="text-primary font-bold hover:underline ml-1" to="/login">Prihláste sa</Link>
+                        </p>
+                    </div>
+                </div>
+            </main>
+
+            {/* Footer */}
+            <footer className="w-full bg-surface-container dark:bg-surface-container-high border-t border-base-300 dark:border-outline-variant"></footer>
         </div>
-    )
-} export default Register;
+    );
+}
+
+export default Register;
