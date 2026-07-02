@@ -3,28 +3,6 @@ import { Link } from 'react-router-dom';
 function LandingPage() {
     return (
         <div className="bg-base-100 text-on-surface font-body-md antialiased min-h-screen">
-
-            {/* TopNavBar */}
-            <header className="docked full-width top-0 sticky bg-surface/90 backdrop-blur-md z-50 border-b border-base-300 shadow-sm">
-                <nav className="flex justify-between items-center w-full px-margin-sm md:px-margin-lg h-16 max-w-[1280px] mx-auto">
-                    <div className="flex items-center gap-8">
-                        <span className="font-headline-md text-headline-md font-bold text-primary">AutoLog</span>
-                        <div className="hidden md:flex gap-6">
-                            <a className="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#features">Ako to funguje?</a>
-                            <a className="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#pricing">Cenník</a>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <Link className="font-label-md text-label-md text-on-surface-variant px-4 py-2 hover:bg-surface-container-low transition-colors rounded-lg" to="/login">
-                            Prihlásiť sa
-                        </Link>
-                        <Link className="font-label-md text-label-md bg-primary text-on-primary px-5 py-2.5 rounded-lg shadow-sm hover:opacity-90 active:scale-95 transition-all" to="/register">
-                            Vytvoriť účet
-                        </Link>
-                    </div>
-                </nav>
-            </header>
-
             <main>
                 {/* Hero Section */}
                 <section className="relative overflow-hidden pt-20 pb-32 px-margin-sm md:px-margin-lg max-w-[1280px] mx-auto">

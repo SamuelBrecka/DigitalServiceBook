@@ -1,48 +1,45 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { authService } from '../../services/authService.js';
 
 function Login({ onLogin }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false); // Už naviazané na checkbox
 
-    const handleSubmit = (e) => {
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Logiku API volania (fetch) si sem už dopíšeš sám
-        console.log("Odosielam login:", { email, password });
+        setError('');
+        setIsLoading(true);
 
-        // Príklad volania callbacku po úspešnom prihlásení:
-        // onLogin(userData);
+        try {
+            const userData = await authService.login(email, password);
+
+            if (onLogin) {
+                onLogin(userData, rememberMe);
+            }
+
+            navigate('/dashboard');
+
+        } catch (err) {
+            setError(err.message || 'Prihlásenie zlyhalo. Skúste to znova.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
         <div className="bg-base-100 min-h-screen flex flex-col font-body-md antialiased text-on-surface">
-
-            {/* TopAppBar */}
-            <header className="fixed top-0 w-full z-50 bg-surface border-b border-base-300 shadow-sm">
-                <div className="flex justify-between items-center px-margin-md md:px-margin-lg h-16 max-w-[1280px] mx-auto">
-                    <div className="flex items-center gap-2">
-                        <span className="material-symbols-outlined text-primary text-3xl">directions_car</span>
-                        <span className="font-headline-md text-headline-md font-bold text-primary">AutoLog</span>
-                    </div>
-                    <div className="flex items-center gap-stack-md">
-                        <div className="flex items-center gap-4">
-                            <Link className="font-label-md text-label-md text-primary hover:text-secondary transition-colors duration-200" to="/login">
-                                Sign In
-                            </Link>
-                            <Link className="font-label-md text-label-md text-white bg-primary px-4 py-2 rounded-lg hover:bg-secondary transition-colors duration-200" to="/register">
-                                Register
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
-            {/* Main Content: Login Canvas */}
+            {/* Main Content */}
             <main className="flex-grow flex items-center justify-center pt-24 pb-12 px-margin-sm">
                 <div className="w-full max-w-md bg-white rounded-lg p-8 login-card">
 
-                    {/* Logo and Header */}
                     <div className="text-center mb-8">
                         <div className="inline-flex items-center justify-center w-16 h-16 bg-surface-container rounded-full mb-4">
                             <span className="material-symbols-outlined text-primary text-4xl" style={{ fontVariationSettings: '"FILL" 1' }}>dataset</span>
@@ -51,9 +48,15 @@ function Login({ onLogin }) {
                         <p className="font-body-sm text-body-sm text-on-surface-variant">Vitajte späť vo vašej digitálnej servisnej knižke.</p>
                     </div>
 
-                    {/* Login Form */}
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Zobrazenie chybovej hlášky, ak backend vráti chybu */}
+                    {error && (
+                        <div className="mb-4 p-3 bg-error-container text-on-error-container rounded-lg font-body-sm text-sm flex items-center gap-2 border border-error/20">
+                            <span className="material-symbols-outlined text-xl">error</span>
+                            {error}
+                        </div>
+                    )}
 
+                    <form onSubmit={handleSubmit} className="space-y-6">
                         {/* Email Input */}
                         <div className="space-y-2">
                             <label className="font-label-md text-label-md text-on-surface" htmlFor="email">Email</label>
@@ -65,6 +68,7 @@ function Login({ onLogin }) {
                                     type="email"
                                     placeholder="vas@email.com"
                                     required
+                                    disabled={isLoading}
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
@@ -82,6 +86,7 @@ function Login({ onLogin }) {
                                     type={showPassword ? "text" : "password"}
                                     placeholder="••••••••"
                                     required
+                                    disabled={isLoading}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
@@ -89,7 +94,7 @@ function Login({ onLogin }) {
                                     className="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-primary"
                                     onClick={() => setShowPassword(!showPassword)}
                                     type="button"
-                                >
+                                    disabled={isLoading}>
                                     <span className="material-symbols-outlined text-xl">
                                         {showPassword ? "visibility_off" : "visibility"}
                                     </span>
@@ -101,21 +106,38 @@ function Login({ onLogin }) {
                         <div className="flex items-center justify-between">
                             <label className="flex items-center gap-2 cursor-pointer group">
                                 <div className="relative flex items-center">
-                                    <input className="peer appearance-none w-5 h-5 border border-base-300 rounded bg-white checked:bg-primary checked:border-primary transition-all" type="checkbox" />
+                                    <input
+                                        className="peer appearance-none w-5 h-5 border border-base-300 rounded bg-white checked:bg-primary checked:border-primary transition-all"
+                                        type="checkbox"
+                                        id="rememberMe"
+                                        disabled={isLoading}
+                                        checked={rememberMe}
+                                        onChange={(e) => setRememberMe(e.target.checked)}
+                                    />
                                     <span className="material-symbols-outlined absolute text-white text-[16px] opacity-0 peer-checked:opacity-100 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">check</span>
                                 </div>
-                                <span className="font-label-md text-label-md text-on-surface-variant group-hover:text-on-surface">Zapamätať si ma</span>
+                                <span className="font-label-md text-label-md text-on-surface-variant group-hover:text-on-surface select-none">Zapamätať si ma</span>
                             </label>
                             <a className="font-label-md text-label-md text-primary hover:text-secondary transition-colors" href="#">Zabudli ste heslo?</a>
                         </div>
 
-                        {/* Submit Button */}
-                        <button className="w-full py-4 bg-primary-container text-white rounded-lg font-label-md text-label-md hover:bg-primary transition-all active:scale-[0.98] shadow-sm" type="submit">
-                            Prihlásiť sa
+                        {/* Submit Button s animáciou načítavania */}
+                        <button
+                            className="w-full py-4 bg-primary text-white rounded-lg font-label-md text-label-md hover:opacity-90 transition-all active:scale-[0.98] shadow-sm flex items-center justify-center gap-2 disabled:opacity-70 disabled:pointer-events-none"
+                            type="submit"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? (
+                                <>
+                                    <span className="material-symbols-outlined animate-spin">sync</span>
+                                    Prihlasujem...
+                                </>
+                            ) : (
+                                "Prihlásiť sa"
+                            )}
                         </button>
                     </form>
 
-                    {/* Registration Footer */}
                     <div className="mt-8 pt-6 border-t border-base-200 text-center">
                         <p className="font-body-sm text-body-sm text-on-surface-variant">
                             Ešte nemáte účet?
@@ -124,8 +146,6 @@ function Login({ onLogin }) {
                     </div>
                 </div>
             </main>
-
-            {/* Footer */}
             <footer className="w-full bg-surface-container border-t border-base-300 mt-auto"></footer>
         </div>
     );

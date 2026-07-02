@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${app.cors.allowed-origins}")
 public class UserController {
 
     private final UserService userService;
@@ -31,6 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
+    @CrossOrigin(origins = "${app.cors.allowed-origins}")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
             User user = userService.login(request.getEmail(), request.getPassword());

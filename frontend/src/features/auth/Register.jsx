@@ -1,50 +1,51 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Pridaný useNavigate import
+import { authService } from "../../services/authService.js";
 
 function Register() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [termsAccepted, setTermsAccepted] = useState(false);
+    const [confirmPassword, setConfirmPassword] = useState(''); // Pridaný stav pre potvrdenie hesla
+    const [termsAccepted, setTermsAccepted] = useState(false); // Pridaný stav pre podmienky
+    const [showPassword, setShowPassword] = useState(false);
 
-    const handleSubmit = (e) => {
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const navigate = useNavigate(); // Inicializácia navigácie
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
 
+        // Klientská validácia: Zhoda hesiel
         if (password !== confirmPassword) {
-            alert("Heslá sa nezhodujú!");
+            setError('Heslá se nezhodujú.');
             return;
         }
 
-        // Sem príde tvoje API volanie na Spring Boot
-        console.log("Odosielam registráciu:", {
-            firstName,
-            lastName,
-            email,
-            password,
-            termsAccepted
-        });
+        setIsLoading(true);
+
+        try {
+            await authService.register(firstName, lastName, email, password);
+            setSuccess(true);
+
+            setTimeout(() => {
+                navigate('/login');
+            }, 2000);
+
+        } catch (err) {
+            setError(err.message || 'Registrácia zlyhala. Skúste to znova.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
         <div className="flex flex-col min-h-screen bg-background font-body-md antialiased text-on-surface">
-
-            {/* TopAppBar */}
-            <header className="fixed top-0 w-full z-50 bg-surface dark:bg-surface-dim border-b border-base-300 dark:border-outline-variant shadow-sm dark:shadow-none">
-                <div className="flex justify-between items-center px-margin-md md:px-margin-lg h-16 max-w-[1280px] mx-auto">
-                    <div className="flex items-center gap-stack-md">
-                        <span className="material-symbols-outlined text-primary text-3xl" style={{ fontVariationSettings: '"FILL" 1' }}>directions_car</span>
-                        <Link className="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed" to="/">AutoLog</Link>
-                    </div>
-                    <nav className="hidden md:flex items-center gap-gutter"></nav>
-                    <div className="flex items-center gap-stack-md">
-                        <Link className="font-label-md text-label-md text-primary hover:text-secondary transition-colors duration-200 px-4 py-2" to="/login">Sign In</Link>
-                        <Link className="font-label-md text-label-md bg-primary text-on-primary hover:opacity-90 transition-opacity px-6 py-2 rounded-lg" to="/register">Register</Link>
-                    </div>
-                </div>
-            </header>
-
             {/* Main Content: Registration Section */}
             <main className="flex-grow flex items-center justify-center pt-24 pb-12 px-margin-sm relative">
 
@@ -65,6 +66,22 @@ function Register() {
                         <p className="font-body-sm text-body-sm text-on-surface-variant">Vaša digitálna servisná knižka vždy po ruke.</p>
                     </div>
 
+                    {/* Zobrazenie chybovej hlášky */}
+                    {error && (
+                        <div className="mb-4 p-3 bg-red-100 text-red-800 rounded-lg font-body-sm text-sm flex items-center gap-2 border border-red-200">
+                            <span className="material-symbols-outlined text-xl">error</span>
+                            {error}
+                        </div>
+                    )}
+
+                    {/* Zobrazenie úspešnej hlášky */}
+                    {success && (
+                        <div className="mb-4 p-3 bg-green-100 text-green-800 rounded-lg font-body-sm text-sm flex items-center gap-2 border border-green-200">
+                            <span className="material-symbols-outlined text-xl">check_circle</span>
+                            Účet úspešne vytvorený! Presmerovávam...
+                        </div>
+                    )}
+
                     <form onSubmit={handleSubmit} className="flex flex-col gap-stack-md">
 
                         {/* Full Name Field */}
@@ -79,6 +96,7 @@ function Register() {
                                         type="text"
                                         placeholder="Janko"
                                         required
+                                        disabled={isLoading || success}
                                         value={firstName}
                                         onChange={(e) => setFirstName(e.target.value)}
                                     />
@@ -94,6 +112,7 @@ function Register() {
                                         type="text"
                                         placeholder="Hraško"
                                         required
+                                        disabled={isLoading || success}
                                         value={lastName}
                                         onChange={(e) => setLastName(e.target.value)}
                                     />
@@ -112,6 +131,7 @@ function Register() {
                                     type="email"
                                     placeholder="vas@email.com"
                                     required
+                                    disabled={isLoading || success}
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
@@ -129,6 +149,7 @@ function Register() {
                                     type="password"
                                     placeholder="••••••••"
                                     required
+                                    disabled={isLoading || success}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
@@ -146,6 +167,7 @@ function Register() {
                                     type="password"
                                     placeholder="••••••••"
                                     required
+                                    disabled={isLoading || success}
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                 />
@@ -159,18 +181,23 @@ function Register() {
                                 id="terms"
                                 type="checkbox"
                                 required
+                                disabled={isLoading || success}
                                 checked={termsAccepted}
                                 onChange={(e) => setTermsAccepted(e.target.checked)}
                             />
-                            <label className="font-body-sm text-body-sm text-on-surface-variant" htmlFor="terms">
+                            <label className="font-body-sm text-body-sm text-on-surface-variant select-none cursor-pointer" htmlFor="terms">
                                 Súhlasím s <a className="text-primary font-bold hover:underline" href="#">obchodnými podmienkami</a> a spracovaním osobných údajov.
                             </label>
                         </div>
 
                         {/* Submit Button */}
-                        <button className="mt-stack-sm w-full bg-primary-container text-white py-3 px-6 rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity flex items-center justify-center gap-stack-sm" type="submit">
-                            Zaregistrovať sa
-                            <span className="material-symbols-outlined text-lg">arrow_forward</span>
+                        <button
+                            className="mt-stack-sm w-full bg-primary-container text-white py-3 px-6 rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity flex items-center justify-center gap-stack-sm disabled:opacity-70 disabled:pointer-events-none"
+                            type="submit"
+                            disabled={isLoading || success}
+                        >
+                            {isLoading ? "Vytváram účet..." : "Zaregistrovať sa"}
+                            {!isLoading && <span className="material-symbols-outlined text-lg">arrow_forward</span>}
                         </button>
                     </form>
 
