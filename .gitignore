@@ -39,3 +39,4 @@ data.db
 *.log
 
 .env
+.opencode

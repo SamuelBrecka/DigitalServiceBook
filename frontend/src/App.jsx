@@ -4,6 +4,7 @@ import Navbar from './components/Navbar.jsx';
 import LandingPage from './pages/LandingPage.jsx';
 import Login from './features/auth/Login.jsx';
 import Register from './features/auth/Register.jsx';
+import Garage from './pages/Garage.jsx';
 import ProtectedRoute from "./ProtectedRoute.jsx";
 
 function App() {
@@ -67,10 +68,10 @@ function App() {
                 />
 
                 <Route
-                    path="/dashboard"
+                    path="/garage"
                     element={
                         <ProtectedRoute user={user}>
-                            <div className="pt-24 p-8">Tu bude tvoja super garáž!</div>
+                            <Garage />
                         </ProtectedRoute>
                     }
                 />

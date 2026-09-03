@@ -29,6 +29,12 @@ function Navbar({ user, onLogout }) {
                     {user ? (
                         /* PRIHLÁSENÝ POUŽÍVATEĽ */
                         <div className="flex items-center gap-4">
+                            <Link
+                                to="/garage"
+                                className="font-label-md text-label-md text-primary hover:text-secondary transition-colors duration-200 px-4 py-2"
+                            >
+                                Moja garáž
+                            </Link>
                             <span className="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
                                 <span className="material-symbols-outlined text-xl">account_circle</span>
                                 {`${user.firstName} ${user.lastName}`}
