@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import LandingPage from './pages/LandingPage.jsx';
 import Login from './features/auth/Login.jsx';
@@ -45,8 +45,22 @@ function App() {
 
     return (
         <Router>
-            <Navbar user={user} onLogout={handleLogout} />
+            <AppContent
+                user={user}
+                onLogout={handleLogout}
+                handleLoginSuccess={handleLoginSuccess}
+            />
+        </Router>
+    );
+}
 
+function AppContent({ user, onLogout, handleLoginSuccess }) {
+    const location = useLocation();
+    const showNavbar = location.pathname !== '/garage';
+
+    return (
+        <>
+            {showNavbar && <Navbar user={user} onLogout={onLogout} />}
             <Routes>
                 <Route path="/" element={<LandingPage />} />
 
@@ -71,12 +85,12 @@ function App() {
                     path="/garage"
                     element={
                         <ProtectedRoute user={user}>
-                            <Garage />
+                            <Garage user={user} onLogout={onLogout} />
                         </ProtectedRoute>
                     }
                 />
             </Routes>
-        </Router>
+        </>
     );
 }
 

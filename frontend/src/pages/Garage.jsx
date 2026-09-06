@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { garageService } from '../services/garageService';
 
-function Garage() {
+function Garage({ user, onLogout }) {
     const [cars, setCars] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isMobileOpen, setIsMobileOpen] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         loadCars();
@@ -21,6 +24,21 @@ function Garage() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleLogoutClick = () => {
+        if (onLogout) {
+            onLogout();
+        }
+        navigate('/');
+    };
+
+    const toggleCollapse = () => {
+        setIsCollapsed(!isCollapsed);
+    };
+
+    const toggleMobile = () => {
+        setIsMobileOpen(!isMobileOpen);
     };
 
     const getStatusBadge = (status) => {
@@ -60,72 +78,142 @@ function Garage() {
 
     return (
         <div className="flex min-h-screen bg-base-100">
-            {/* SideNavBar - Desktop */}
-            <aside className="hidden md:flex flex-col h-screen p-4 gap-4 bg-surface-container-low border-r border-base-300 w-64 sticky top-0">
+            {/* Mobile Hamburger Menu Button */}
+            <button
+                onClick={toggleMobile}
+                className="md:hidden fixed top-4 left-4 z-50 p-2 bg-surface border border-base-300 rounded-lg shadow-md"
+            >
+                <span className="material-symbols-outlined text-primary">
+                    {isMobileOpen ? 'close' : 'menu'}
+                </span>
+            </button>
+
+            {/* SideNavBar - Desktop & Mobile */}
+            <aside className={`
+                ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+                md:flex md:flex-col flex-col h-screen p-4 gap-4 bg-surface-container-low border-r border-base-300 
+                w-64 md:relative fixed top-0 left-0 z-40 transition-transform duration-300 ease-in-out
+                ${isCollapsed ? 'md:w-16' : 'md:w-64'}
+            `}>
+                {/* Collapse Toggle Button (Desktop only) */}
+                <button
+                    onClick={toggleCollapse}
+                    className="hidden md:flex absolute -right-3 top-20 w-6 h-6 bg-surface border border-base-300 rounded-full items-center justify-center shadow-sm hover:bg-surface-container transition-colors"
+                >
+                    <span className="material-symbols-outlined text-xs text-on-surface-variant">
+                        {isCollapsed ? 'chevron_right' : 'chevron_left'}
+                    </span>
+                </button>
+
                 <div className="flex items-center gap-3 mb-6 px-2">
-                    <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary">
+                    <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary flex-shrink-0">
                         <span className="material-symbols-outlined">directions_car</span>
                     </div>
-                    <div>
-                        <h1 className="font-headline-sm text-headline-sm font-bold text-primary">AutoLog</h1>
-                        <p className="text-xs text-outline font-label-sm uppercase tracking-wider">Service Book</p>
-                    </div>
+                    {!isCollapsed && (
+                        <div>
+                            <h1 className="font-headline-sm text-headline-sm font-bold text-primary">AutoLog</h1>
+                            <p className="text-xs text-outline font-label-sm uppercase tracking-wider">Service Book</p>
+                        </div>
+                    )}
                 </div>
+
+                {/* User Info & Sign Out */}
+                {user && (
+                    <div className={`mb-6 ${isCollapsed ? 'px-2' : 'px-2'}`}>
+                        <div className={`flex items-center gap-3 p-3 bg-surface-container rounded-lg ${isCollapsed ? 'justify-center' : ''}`}>
+                            <span className="material-symbols-outlined text-xl text-primary flex-shrink-0">account_circle</span>
+                            {!isCollapsed && (
+                                <div className="flex-1 min-w-0">
+                                    <p className="font-label-md text-label-md font-bold text-primary truncate">{user.firstName} {user.lastName}</p>
+                                    <button
+                                        onClick={handleLogoutClick}
+                                        className="text-xs text-error hover:underline"
+                                    >
+                                        Odhlásiť sa
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+
                 <nav className="flex-1 flex flex-col gap-1">
                     <Link
                         to="/garage"
+                        onClick={() => setIsMobileOpen(false)}
                         className="flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-2 font-bold transition-all duration-200"
                     >
                         <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>directions_car</span>
-                        <span className="font-label-md text-label-md">My Garage</span>
+                        {!isCollapsed && <span className="font-label-md text-label-md">My Garage</span>}
                     </Link>
                     <Link
                         to="/service-history"
+                        onClick={() => setIsMobileOpen(false)}
                         className="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-surface-container-high rounded-lg transition-all duration-200"
                     >
                         <span className="material-symbols-outlined">history</span>
-                        <span className="font-label-md text-label-md">Service History</span>
+                        {!isCollapsed && <span className="font-label-md text-label-md">Service History</span>}
                     </Link>
                     <Link
                         to="/expenses"
+                        onClick={() => setIsMobileOpen(false)}
                         className="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-surface-container-high rounded-lg transition-all duration-200"
                     >
                         <span className="material-symbols-outlined">payments</span>
-                        <span className="font-label-md text-label-md">Expenses</span>
+                        {!isCollapsed && <span className="font-label-md text-label-md">Expenses</span>}
                     </Link>
                     <Link
                         to="/notifications"
+                        onClick={() => setIsMobileOpen(false)}
                         className="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-surface-container-high rounded-lg transition-all duration-200"
                     >
                         <span className="material-symbols-outlined">notifications</span>
-                        <span className="font-label-md text-label-md">Notifications</span>
+                        {!isCollapsed && <span className="font-label-md text-label-md">Notifications</span>}
                     </Link>
                     <div className="mt-auto border-t border-base-300 pt-4 flex flex-col gap-1">
                         <Link
                             to="/settings"
+                            onClick={() => setIsMobileOpen(false)}
                             className="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-surface-container-high rounded-lg transition-all duration-200"
                         >
                             <span className="material-symbols-outlined">settings</span>
-                            <span className="font-label-md text-label-md">Settings</span>
+                            {!isCollapsed && <span className="font-label-md text-label-md">Settings</span>}
                         </Link>
                         <Link
                             to="/help"
+                            onClick={() => setIsMobileOpen(false)}
                             className="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-surface-container-high rounded-lg transition-all duration-200"
                         >
                             <span className="material-symbols-outlined">help</span>
-                            <span className="font-label-md text-label-md">Help</span>
+                            {!isCollapsed && <span className="font-label-md text-label-md">Help</span>}
                         </Link>
                     </div>
                 </nav>
-                <div className="mt-4 px-2">
-                    <button className="w-full bg-primary text-on-primary py-3 rounded-lg font-label-md text-label-md shadow-sm hover:opacity-90 active:scale-[0.98] transition-all">
-                        Add Vehicle
-                    </button>
-                </div>
+                {!isCollapsed && (
+                    <div className="mt-4 px-2">
+                        <button className="w-full bg-primary text-on-primary py-3 rounded-lg font-label-md text-label-md shadow-sm hover:opacity-90 active:scale-[0.98] transition-all">
+                            Add Vehicle
+                        </button>
+                    </div>
+                )}
             </aside>
 
+            {/* Mobile Overlay */}
+            {isMobileOpen && (
+                <div
+                    className="md:hidden fixed inset-0 bg-black/50 z-30"
+                    onClick={() => setIsMobileOpen(false)}
+                />
+            )}
+
             {/* Main Content Canvas */}
-            <main className="flex-1 min-w-0 bg-base-100 p-6 md:p-10 max-w-[1280px] mx-auto">
+            <main className={`
+                flex-1 min-w-0 bg-base-100 
+                ${isMobileOpen ? 'pl-12' : 'p-6'} 
+                md:p-10 
+                max-w-[1280px] 
+                mx-auto
+            `}>
                 {/* Header Section */}
                 <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                     <div>
@@ -281,30 +369,6 @@ function Garage() {
                     </>
                 )}
             </main>
-
-            {/* Mobile Bottom Navigation */}
-            <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-base-300 px-4 py-2 flex justify-between items-center z-50">
-                <Link to="/garage" className="flex flex-col items-center gap-1 text-primary">
-                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>directions_car</span>
-                    <span className="text-[10px] font-bold">Garáž</span>
-                </Link>
-                <Link to="/service-history" className="flex flex-col items-center gap-1 text-outline">
-                    <span className="material-symbols-outlined">history</span>
-                    <span className="text-[10px]">Servis</span>
-                </Link>
-                <Link to="/expenses" className="flex flex-col items-center gap-1 text-outline">
-                    <span className="material-symbols-outlined">payments</span>
-                    <span className="text-[10px]">Náklady</span>
-                </Link>
-                <Link to="/notifications" className="flex flex-col items-center gap-1 text-outline">
-                    <span className="material-symbols-outlined">notifications</span>
-                    <span className="text-[10px]">Notif.</span>
-                </Link>
-                <Link to="/profile" className="flex flex-col items-center gap-1 text-outline">
-                    <span className="material-symbols-outlined">account_circle</span>
-                    <span className="text-[10px]">Profil</span>
-                </Link>
-            </nav>
         </div>
     );
 }
