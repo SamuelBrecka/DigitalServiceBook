@@ -13,7 +13,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_DB_USER} -d ${POSTGRES_DB_NAME}"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_DB_USER} -d ${POSTGRES_DB_NAME}",
+        ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -26,10 +30,12 @@ services:
     container_name: autolog_backend
     ports:
       - "8080:8080"
+      - "5005:5005"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/${POSTGRES_DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_DB_PASSWORD}
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
       FRONTEND_URL: http://localhost:3000
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
     depends_on:
