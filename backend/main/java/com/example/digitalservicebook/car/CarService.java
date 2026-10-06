@@ -57,8 +57,15 @@ public class CarService {
         }
         car.setName(request.getName());
         car.setLicensePlate(request.getLicensePlate());
-        car.setImageUrl(request.getImageUrl());
         car.setNextServiceDate(request.getNextServiceDate());
+        if (request.getImageUrl() != null) {
+            if (request.getImageUrl().trim().isEmpty()) {
+                car.setImageUrl(null);
+            } else {
+                car.setImageUrl(request.getImageUrl());
+            }
+        }
+        car.setStatus(CarMapper.calculateStatus(request.getNextServiceDate()));
         Car saved = carRepository.save(car);
         return CarMapper.toResponse(saved);
     }
