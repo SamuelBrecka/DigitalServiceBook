@@ -2,6 +2,7 @@ package com.example.digitalservicebook.car;
 
 import com.example.digitalservicebook.car.dto.CarResponse;
 import com.example.digitalservicebook.car.dto.CreateCarRequest;
+import com.example.digitalservicebook.car.dto.UpdateCarRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -40,5 +41,11 @@ public class CarController {
         String email = authentication.getName();
         carService.deleteCar(id, email);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CarResponse> updateCar(@PathVariable Long id, @RequestBody UpdateCarRequest request, Authentication authentication) {
+        String email = authentication.getName();
+        return ResponseEntity.ok(carService.updateCar(id, request, email));
     }
 }

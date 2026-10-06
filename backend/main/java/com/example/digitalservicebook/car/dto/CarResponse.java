@@ -4,7 +4,7 @@ import com.example.digitalservicebook.car.CarStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -14,6 +14,6 @@ public class CarResponse {
     private String name;
     private String licensePlate;
     private String imageUrl;
-    private LocalDateTime nextServiceDate;
+    private LocalDate nextServiceDate;
     private CarStatus status;
 }

@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateCarRequest {
+public class UpdateCarRequest {
     private String name;
     private String licensePlate;
     private String imageUrl;

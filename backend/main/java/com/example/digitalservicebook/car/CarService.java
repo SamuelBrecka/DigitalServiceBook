@@ -2,6 +2,7 @@ package com.example.digitalservicebook.car;
 
 import com.example.digitalservicebook.car.dto.CarResponse;
 import com.example.digitalservicebook.car.dto.CreateCarRequest;
+import com.example.digitalservicebook.car.dto.UpdateCarRequest;
 import com.example.digitalservicebook.user.User;
 import com.example.digitalservicebook.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,22 @@ public class CarService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Car car = CarMapper.toEntity(request);
         car.setUser(user);
+        Car saved = carRepository.save(car);
+        return CarMapper.toResponse(saved);
+    }
+
+    public CarResponse updateCar(Long id, UpdateCarRequest request, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Car car = carRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Car not found"));
+        if (!car.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Unauthorized");
+        }
+        car.setName(request.getName());
+        car.setLicensePlate(request.getLicensePlate());
+        car.setImageUrl(request.getImageUrl());
+        car.setNextServiceDate(request.getNextServiceDate());
         Car saved = carRepository.save(car);
         return CarMapper.toResponse(saved);
     }

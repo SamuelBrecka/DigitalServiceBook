@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,11 +24,11 @@ public class Car {
     @Column(name = "license_plate", nullable = false)
     private String licensePlate;
 
-    @Column(name = "image_url", nullable = true)
+    @Column(name = "image_url", columnDefinition = "TEXT")
     private String imageUrl;
 
     @Column(name = "next_service_date", nullable = false)
-    private LocalDateTime nextServiceDate;
+    private LocalDate nextServiceDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
